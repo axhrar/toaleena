@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A letter for Aleena</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #fdf6ee; }
+  body {
+    font-family: 'Lora', Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.25rem 3rem;
+    min-height: 100%;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .grain {
+    position: fixed;
+    inset: 0;
+    opacity: .035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  #tagline {
+    font-family: 'Dancing Script', cursive;
+    font-size: 14px;
+    color: #a07840;
+    letter-spacing: 2px;
+    margin-bottom: 1.75rem;
+    position: relative;
+    z-index: 1;
+  }
+  #envelope {
+    width: min(280px, 85vw);
+    aspect-ratio: 3 / 2;
+    margin-bottom: 2rem;
+    position: relative;
+    cursor: pointer;
+    transition: transform .2s;
+    z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #envelope:active { transform: scale(0.97); }
+  #env-body {
+    width: 100%; height: 100%;
+    background: #e8c99a;
+    border-radius: 4px;
+    border: 1.5px solid #c9a97a;
+    position: relative;
+    overflow: hidden;
+  }
+  #env-flap {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 50%;
+    clip-path: polygon(0 0, 50% 78%, 100% 0);
+    background: #d4aa78;
+    transform-origin: top center;
+    transition: transform .75s cubic-bezier(.4,0,.2,1);
+  }
+  #env-flap.open { transform: rotateX(-165deg); }
+  #env-bottom {
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 58%;
+    clip-path: polygon(0 100%, 50% 22%, 100% 100%);
+    background: #d4b482;
+  }
+  #env-left {
+    position: absolute; bottom: 0; left: 0;
+    width: 50%; height: 100%;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    background: #dbb980;
+  }
+  #env-right {
+    position: absolute; bottom: 0; right: 0;
+    width: 50%; height: 100%;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    background: #d0a96c;
+  }
+  #env-seal {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 38px; height: 38px;
+    background: #b5401a;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 2px solid #8a2e12;
+    transition: opacity .35s;
+    color: #fff;
+  }
+  #env-seal.hidden { opacity: 0; }
+  #tap-hint {
+    position: absolute; bottom: 10px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px; color: #a07840;
+    font-style: italic; white-space: nowrap;
+    transition: opacity .3s;
+  }
+  #letter-wrap {
+    width: 100%; max-width: 480px;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .9s ease, transform .9s ease;
+    pointer-events: none;
+    position: relative; z-index: 1;
+  }
+  #letter-wrap.visible {
+    opacity: 1; transform: translateY(0);
+    pointer-events: auto;
+  }
+  #letter {
+    background: #fffdf7;
+    border: 1px solid #e0cba8;
+    border-radius: 4px;
+    padding: 1.75rem 1.5rem 1.75rem;
+    position: relative;
+    color: #3e2a14;
+    font-size: 15px;
+    line-height: 1.95;
+  }
+  @media (max-width: 380px) {
+    #letter { font-size: 14px; padding: 1.4rem 1.2rem; }
+  }
+  #letter::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: #b5401a;
+    border-radius: 4px 4px 0 0;
+  }
+  #letter-date {
+    font-size: 11px; color: #a07840;
+    letter-spacing: 1px; margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+  #salutation {
+    font-family: 'Dancing Script', cursive;
+    font-size: 28px; color: #b5401a;
+    display: block; margin-bottom: 1rem;
+  }
+  .lp { margin-bottom: 1rem; }
+  #sign {
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px; color: #b5401a;
+    display: block; margin-top: 1.5rem;
+  }
+  #ps {
+    margin-top: .5rem;
+    font-size: 13px; color: #a07840;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+
+<div id="envelope" onclick="open_env()">
+  <div id="env-body">
+    <div id="env-left"></div>
+    <div id="env-right"></div>
+    <div id="env-bottom"></div>
+    <div id="env-flap"></div>
+    <div id="env-seal">&#x2665;</div>
+  </div>
+  <div id="tap-hint">tap to open</div>
+</div>
+
+<div id="letter-wrap">
+  <div id="letter">
+    <span id="salutation">Hey Aleena,</span>
+    <div class="lp">I know we haven't met yet, but knowing you from the other side of a screen has honestly been really inspiring for me. The way you push yourself, the way you refuse to stay still. The little bits I get to see of you, the way you're always working toward something, it's kind of hard not to notice.</div>
+    <div class="lp">It makes me want to be better too. So thank you for that, even if you didn't know you were doing it. You raise the bar just by existing and by being the person you are every single day. I see it. I notice. And I'm really grateful that I get to.</div>
+    <div class="lp">I'm grateful for every little snippet of your day you share. And whenever we do get to that point, I'd love to be around for the bigger moments too. Just to be by your side.</div>
+    <div class="lp">Also, for the record, you are genuinely so beautiful. The prettiest. I just had to say it. Consider yourself my muse, even from a distance. Hopefully not for long.</div>
+    <span id="sign">Akhrar &#x2665;</span>
+    <div id="ps">P.S. this got a little long for a text so I made it a letter instead</div>
+  </div>
+</div>
+
+<script>
+  let done = false;
+  function open_env() {
+    if (done) return;
+    done = true;
+    document.getElementById('env-flap').classList.add('open');
+    document.getElementById('env-seal').classList.add('hidden');
+    document.getElementById('tap-hint').style.opacity = '0';
+    setTimeout(() => document.getElementById('letter-wrap').classList.add('visible'), 720);
+  }
+</script>
+</body>
+</html>
